@@ -178,6 +178,21 @@ var Loader = (function() {
 		var extension =  fileName.slice((Math.max(0, fileName.lastIndexOf(".")) || Infinity) + 1);
 
 		switch (extension.toLowerCase()) {
+        case "mjs":
+			Log.log("Load script: " + fileName);
+			var script = document.createElement("script");
+			script.type = "module";
+			script.src = fileName;
+			script.onload = function() {
+				if (typeof callback === "function") {callback();}
+			};
+			script.onerror = function() {
+				console.error("Error on loading script:", fileName);
+				if (typeof callback === "function") {callback();}
+			};
+
+			document.getElementsByTagName("body")[0].appendChild(script);
+			break;
 		case "js":
 			Log.log("Load script: " + fileName);
 			var script = document.createElement("script");
